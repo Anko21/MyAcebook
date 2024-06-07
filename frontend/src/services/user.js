@@ -1,7 +1,7 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 
-async function getUserById(id) {
+export async function getUserById(id) {
     const response = await fetch(`${BACKEND_URL}/users/${id}`);
     const data = await response.json();
     return data;
@@ -20,6 +20,5 @@ async function updateUser(id, updatedUserData) {
 }
 
 export default {
-    getUserById,
     updateUser
 };
