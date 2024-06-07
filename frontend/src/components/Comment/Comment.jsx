@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import "./Comment.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment, unlikeComment } from "../../services/commentsServices"
-
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const Comment = (props) => {
@@ -18,12 +17,11 @@ const Comment = (props) => {
             console.log(props.comment.likedBy.includes(userId));
         }
     
-        // if (comment.userId) {
-        //     setUserName(`${props.comment.userId.firstName} ${props.comment.userId.lastName}`);
-        //     const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-            // const defaultProfilePicture = `${backendUrl}/uploads/default-profile-photo.jpg`;
-            // setProfilePicture(post.user_id.profilePicture ? `${backendUrl}${post.user_id.profilePicture}` : defaultProfilePicture);
-        // }
+        if (props.comment.user_id) {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+            const defaultProfilePicture = `${backendUrl}/uploads/default-profile-photo.jpg`;
+            props.setProfilePicture(props.comment.user_id.profilePicture ? `${backendUrl}${props.comment.user_id.profilePicture}` : defaultProfilePicture);
+        }
     }, [props.comment.likedBy]);
 
     console.log('hasLiked line 28', hasLiked);

@@ -116,9 +116,12 @@ const Post = ({ post, updatePost }) => {
             key={comment._id} 
             updateComment={ updateComment }
             comment={comment} 
-            profilePicture={comment.userId.profilePicture ? `${import.meta.env.VITE_BACKEND_URL}${comment.userId.profilePicture}` : `${import.meta.env.VITE_BACKEND_URL}/uploads/default-profile-photo.jpg`}
-          />
-        ))}
+
+            profilePicture = {profilePicture}
+            setProfilePicture = {setProfilePicture}
+            />
+          ))}
+ 
         <form onSubmit={handleCommentSubmit} className="d-flex align-items-center mt-3">
           <img
             src={profilePicture}
