@@ -5,6 +5,8 @@ import { likePost, unlikePost } from "../../services/posts";
 import './Post.css';
 import Comment from "../Comment/Comment";
 import { createComment, getPostComments } from "../../services/commentsServices";
+import { getUserById } from "../../services/user.js";
+
 
 const Post = ({ post, updatePost }) => {
   const [hasLiked, setHasLiked] = useState(false);
@@ -12,6 +14,7 @@ const Post = ({ post, updatePost }) => {
   const [profilePicture, setProfilePicture] = useState('');
   const [comments, setComments] = useState([]);
   const [commentMessage, setCommentMessage] = useState('');
+  const [currUserName, setCurrUserName] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -25,6 +28,16 @@ const Post = ({ post, updatePost }) => {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
       const defaultProfilePicture = `${backendUrl}/uploads/default-profile-photo.jpg`;
       setProfilePicture(post.user_id.profilePicture ? `${backendUrl}${post.user_id.profilePicture}` : defaultProfilePicture);
+    }
+
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const userId = decodedToken.user_id;
+      getUserById(userId).then(user => {
+        setCurrUserName(`${user.firstName} ${user.lastName}`);
+      }).catch(err => {
+        console.error("Failed to fetch user details:", err);
+      });
     }
   }, [post.likedBy, post.user_id]);
 
@@ -81,8 +94,7 @@ const Post = ({ post, updatePost }) => {
     setComments(comments.map(comment => comment._id === updatedComment._id ? updatedComment : comment));
   };
 
-
-
+  const sortedComments = comments.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return (
     <div className="card my-3">
@@ -111,12 +123,11 @@ const Post = ({ post, updatePost }) => {
       </div>
 
       <div className="mt-4">
-        {comments.map((comment) => (
+        {sortedComments.map((comment) => (
           <Comment 
             key={comment._id} 
             updateComment={ updateComment }
             comment={comment} 
-
             profilePicture = {profilePicture}
             setProfilePicture = {setProfilePicture}
             />
@@ -134,7 +145,7 @@ const Post = ({ post, updatePost }) => {
           <textarea
             className="form-control me-2"
             type="text"
-            placeholder={`Hey ${post.user_id.firstName}, add a comment...`}
+            placeholder={`Hey ${currUserName}, add a comment...`}
             value={commentMessage}
             onChange={(e) => setCommentMessage(e.target.value)}
             rows="2"

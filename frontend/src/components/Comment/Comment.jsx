@@ -4,6 +4,7 @@ import "./Comment.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment, unlikeComment } from "../../services/commentsServices"
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import {getUserById} from '../../services/user'
 
 const Comment = (props) => {
     const [hasLiked, setHasLiked] = useState(false);
@@ -11,10 +12,8 @@ const Comment = (props) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (props.comment.likedBy && token) {
-            console.log('coment.likeBy line 20',props.comment.likedBy);
             const userId = JSON.parse(atob(token.split('.')[1])).user_id;
             setHasLiked(props.comment.likedBy.includes(userId));
-            console.log(props.comment.likedBy.includes(userId));
         }
     
         if (props.comment.user_id) {
@@ -24,7 +23,6 @@ const Comment = (props) => {
         }
     }, [props.comment.likedBy]);
 
-    console.log('hasLiked line 28', hasLiked);
     
     const handleLikeToggle = async () => {
         const token = localStorage.getItem('token');
@@ -41,8 +39,7 @@ const Comment = (props) => {
             console.error(`Error ${hasLiked ? 'unliking' : 'liking'} comment: `, error);
         }
         };
-        
-        console.log('hasLiked line 46', hasLiked);
+
     return (
         <div className="comment-feed">
                 <img

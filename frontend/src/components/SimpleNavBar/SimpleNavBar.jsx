@@ -13,12 +13,12 @@ export const SimpleNavBar= () => {
             <div className='signup-login'>
                 {location.pathname === '/signup' && (
                     <h3>
-                        <button className="signup-login-btn"><Link to="/login">Signup</Link></button>
+                        <button className="signup-login-btn"><Link to="/login">Login</Link></button>
                     </h3> 
                 )}
                 {location.pathname === '/login' &&(
                     <h3>
-                        <button className="signup-login-btn"><Link to="/signup">Login</Link></button>
+                        <button className="signup-login-btn"><Link to="/signup">Signup</Link></button>
                     </h3>
                 )}
             </div>
