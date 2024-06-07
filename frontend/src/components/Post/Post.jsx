@@ -14,7 +14,7 @@ const Post = ({ post, updatePost }) => {
   const [profilePicture, setProfilePicture] = useState('');
   const [comments, setComments] = useState([]);
   const [commentMessage, setCommentMessage] = useState('');
-  const [currUserName, setCurrUserName] = useState('');
+  const [currUser, setCurrUser] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -34,7 +34,7 @@ const Post = ({ post, updatePost }) => {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       const userId = decodedToken.user_id;
       getUserById(userId).then(user => {
-        setCurrUserName(`${user.firstName} ${user.lastName}`);
+        setCurrUser(user);
       }).catch(err => {
         console.error("Failed to fetch user details:", err);
       });
@@ -96,6 +96,9 @@ const Post = ({ post, updatePost }) => {
 
   const sortedComments = comments.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+  const defaultProfilePicture = `${backendUrl}/uploads/default-profile-photo.jpg`;
+
   return (
     <div className="card my-3">
       <div className="card-body">
@@ -132,10 +135,9 @@ const Post = ({ post, updatePost }) => {
             setProfilePicture = {setProfilePicture}
             />
           ))}
- 
         <form onSubmit={handleCommentSubmit} className="d-flex align-items-center mt-3">
           <img
-            src={profilePicture}
+            src={currUser.profilePicture ? `${backendUrl}${currUser.profilePicture}` : defaultProfilePicture}
             alt="Profile"
             className="rounded-circle me-3"
             width="30"
@@ -145,7 +147,7 @@ const Post = ({ post, updatePost }) => {
           <textarea
             className="form-control me-2"
             type="text"
-            placeholder={`Hey ${currUserName}, add a comment...`}
+            placeholder={`Hey ${currUser.firstName}, add a comment...`}
             value={commentMessage}
             onChange={(e) => setCommentMessage(e.target.value)}
             rows="2"
