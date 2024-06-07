@@ -41,7 +41,6 @@ const router = createBrowserRouter([
     <>
     <SimpleNavBar/>
     <NavBar/>
-    
     <FeedPage/> 
     </>
   },
@@ -49,6 +48,7 @@ const router = createBrowserRouter([
     path: "/profile", 
     element: 
     <>
+    <SimpleNavBar/>
     <NavBar/>
     <Profile/> 
     </>
